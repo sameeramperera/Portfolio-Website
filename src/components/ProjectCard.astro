@@ -1,0 +1,42 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import TagList from './TagList.astro';
+import ProjectAffiliation from './ProjectAffiliation.astro';
+
+interface Props {
+  project: CollectionEntry<'projects'>;
+  headingLevel?: 'h2' | 'h3';
+}
+const { project, headingLevel: H = 'h3' } = Astro.props;
+const { title, description, tags, github, live } = project.data;
+const hasBody = Boolean(project.body?.trim());
+const href = hasBody ? `/projects/${project.id}` : (live ?? github);
+---
+
+<article
+  class="relative flex flex-col gap-3 rounded border border-line border-l-2 p-5 transition-colors hover:border-l-accent focus-within:border-l-accent"
+>
+  <ProjectAffiliation company={project.data.company} companyUrl={project.data.companyUrl} class="-mb-1.5" />
+  <H class="font-mono text-[0.9375rem] font-semibold">
+    {
+      href ? (
+        <a href={href} class="no-underline hover:text-accent">
+          {title}
+          {hasBody && <span class="text-accent" aria-hidden="true"> →</span>}
+        </a>
+      ) : (
+        title
+      )
+    }
+  </H>
+  <p class="text-[0.9375rem] text-muted">{description}</p>
+  <TagList tags={tags} />
+  {
+    (github || live) && (
+      <ul class="flex gap-4 font-mono text-xs" aria-label={`${title} links`}>
+        {github && <li><a href={github} target="_blank" rel="noopener noreferrer">source<span class="sr-only"> code for {title} on GitHub (new tab)</span></a></li>}
+        {live && <li><a href={live} target="_blank" rel="noopener noreferrer">live<span class="sr-only"> site for {title} (new tab)</span></a></li>}
+      </ul>
+    )
+  }
+</article>

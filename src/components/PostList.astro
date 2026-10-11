@@ -1,0 +1,60 @@
+---
+import type { Post } from '@/lib/medium';
+import { formatDate } from '@/lib/format';
+
+interface Props {
+  posts: Post[];
+  showExcerpt?: boolean;
+  /** Heading level for post titles, to keep the outline correct where the list is used. */
+  headingLevel?: 'h2' | 'h3';
+  /** 'full': divided list with excerpts. 'compact': one line per post, date column + title, no rules. */
+  variant?: 'full' | 'compact';
+}
+const { posts, showExcerpt = true, headingLevel: H = 'h3', variant = 'full' } = Astro.props;
+const shortDate = (iso: string) => iso.slice(0, 10);
+---
+
+{
+  variant === 'compact' && posts.length > 0 ? (
+    <ol class="space-y-3">
+      {posts.map((post) => (
+        <li class="grid gap-x-6 gap-y-0.5 sm:grid-cols-[6.5rem_1fr]">
+          <time datetime={post.date} class="font-mono text-xs text-muted tabular-nums sm:leading-7">
+            {shortDate(post.date)}
+          </time>
+          <a href={post.url} target="_blank" rel="noopener noreferrer" class="leading-7 no-underline hover:text-accent">
+            {post.title}
+            <span class="text-muted" aria-hidden="true"> ↗</span>
+            <span class="sr-only"> (opens Medium in a new tab)</span>
+          </a>
+        </li>
+      ))}
+    </ol>
+  ) : posts.length === 0 ? (
+    <p class="text-muted">No articles yet.</p>
+  ) : (
+    <ol class="divide-y divide-line border-y border-line">
+      {posts.map((post) => (
+        <li class="group relative py-5">
+          <div class="flex flex-col gap-1 sm:flex-row sm:items-baseline sm:justify-between sm:gap-6">
+            <H class="text-base font-semibold leading-snug">
+              <a
+                href={post.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="no-underline after:absolute after:inset-0 group-hover:text-accent"
+              >
+                {post.title}
+                <span class="sr-only"> (opens Medium in a new tab)</span>
+              </a>
+            </H>
+            <time datetime={post.date} class="shrink-0 font-mono text-xs text-muted tabular-nums">
+              {formatDate(post.date)}
+            </time>
+          </div>
+          {showExcerpt && post.excerpt && <p class="mt-2 text-[0.9375rem] text-muted">{post.excerpt}</p>}
+        </li>
+      ))}
+    </ol>
+  )
+}

@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" fill="#0f1113"/>
+  <rect x="80" y="80" width="1040" height="470" fill="none" stroke="#2a2e33" stroke-width="2"/>
+  <text x="140" y="270" font-family="JetBrains Mono, DejaVu Sans Mono, monospace" font-size="76" font-weight="600" fill="#e8e9e6">Your Name<tspan fill="#3fd9bf">_</tspan></text>
+  <text x="140" y="350" font-family="JetBrains Mono, DejaVu Sans Mono, monospace" font-size="32" fill="#9aa0a8">Software engineer building things for the web.</text>
+  <text x="140" y="470" font-family="JetBrains Mono, DejaVu Sans Mono, monospace" font-size="26" fill="#3fd9bf">experience · projects · writing</text>
+</svg>

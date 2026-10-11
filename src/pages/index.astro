@@ -1,0 +1,94 @@
+---
+import Base from '@/layouts/Base.astro';
+import SectionLabel from '@/components/SectionLabel.astro';
+import TagList from '@/components/TagList.astro';
+import ProjectCard from '@/components/ProjectCard.astro';
+import PostList from '@/components/PostList.astro';
+import { profile, home, links } from '@/config';
+import { getProjects } from '@/lib/content';
+import { getPosts } from '@/lib/posts';
+
+const projects = await getProjects();
+const featured = projects.filter((p) => p.data.featured).slice(0, home.featuredProjects);
+const posts = (await getPosts()).slice(0, home.latestPosts);
+
+const contacts = [
+  { label: 'email', href: links.email && `mailto:${links.email}` },
+  { label: 'github', href: links.github },
+  { label: 'linkedin', href: links.linkedin },
+  { label: 'medium', href: links.medium },
+].filter((c) => c.href);
+---
+
+<Base>
+  <section aria-labelledby="intro" class="mb-20">
+    <div class="flex items-center gap-5">
+      {
+        profile.avatar && (
+          <img
+            src={profile.avatar}
+            alt={`Portrait of ${profile.name}`}
+            width="72"
+            height="72"
+            class="size-[72px] rounded-full border border-line object-cover"
+          />
+        )
+      }
+      <div>
+        <h1 id="intro" class="font-mono text-2xl font-semibold tracking-tight sm:text-3xl">
+          {profile.name}<span class="ml-1 text-accent" aria-hidden="true">_</span>
+        </h1>
+        <p class="mt-2 text-muted">{profile.tagline}</p>
+      </div>
+    </div>
+    {
+      contacts.length > 0 && (
+        <ul class="mt-6 flex flex-wrap items-center gap-x-2 gap-y-1 font-mono text-[0.8125rem] text-muted" aria-label="Contact">
+          {contacts.map(({ label, href }, i) => (
+            <li class="flex items-center gap-2">
+              {i > 0 && <span class="text-line" aria-hidden="true">/</span>}
+              <a href={href} class="text-muted no-underline hover:text-accent" {...(href.startsWith('http') && { target: '_blank', rel: 'me noopener noreferrer' })}>
+                {label}
+                {href.startsWith('http') && <span class="sr-only"> (new tab)</span>}
+              </a>
+            </li>
+          ))}
+        </ul>
+      )
+    }
+  </section>
+
+  <section aria-labelledby="about" class="mb-20">
+    <SectionLabel id="about" index="01">about</SectionLabel>
+    <div class="space-y-4 text-[1.0625rem]">
+      {profile.about.map((p) => <p>{p}</p>)}
+    </div>
+  </section>
+
+  <section aria-labelledby="skills" class="mb-20">
+    <SectionLabel id="skills" index="02">skills</SectionLabel>
+    <TagList tags={profile.skills} label="Skills" />
+  </section>
+
+  {
+    featured.length > 0 && (
+      <section aria-labelledby="featured" class="mb-20">
+        <SectionLabel id="featured" index="03">selected projects</SectionLabel>
+        <div class="grid gap-4">
+          {featured.map((project) => <ProjectCard project={project} />)}
+        </div>
+        <p class="mt-6 font-mono text-sm"><a href="/projects">all projects <span aria-hidden="true">→</span></a></p>
+      </section>
+    )
+  }
+
+  {
+    posts.length > 0 && (
+      <section aria-labelledby="latest">
+        <SectionLabel id="latest" index="04">latest writing</SectionLabel>
+        <PostList posts={posts} variant="compact" />
+        <p class="mt-6 font-mono text-sm"><a href="/writing">all writing <span aria-hidden="true">→</span></a></p>
+      </section>
+    )
+  }
+</Base>

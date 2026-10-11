@@ -1,0 +1,18 @@
+---
+/**
+ * Quiet section heading: "01 ─── experience" in small mono, with a hairline that fills the row.
+ * Renders a real heading element so the document outline stays correct.
+ */
+interface Props {
+  index?: string;
+  as?: 'h1' | 'h2' | 'h3';
+  id?: string;
+}
+const { index, as: Tag = 'h2', id } = Astro.props;
+---
+
+<Tag id={id} class="mb-6 flex items-center gap-3 font-mono text-xs font-normal uppercase tracking-[0.18em] text-muted">
+  {index && <span class="text-accent tabular-nums">{index}</span>}
+  <span><slot /></span>
+  <span class="h-px flex-1 bg-line" aria-hidden="true"></span>
+</Tag>

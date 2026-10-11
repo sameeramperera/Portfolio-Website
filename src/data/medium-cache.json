@@ -1,0 +1,5 @@
+{
+  "_comment": "Fallback used when the Medium feed can't be fetched at build time. Refresh with `npm run medium:refresh`.",
+  "updated": "2026-10-11T00:00:00.000Z",
+  "posts": []
+}

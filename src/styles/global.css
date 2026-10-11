@@ -1,0 +1,155 @@
+@import 'tailwindcss';
+
+/* JetBrains Mono (SIL Open Font License), self-hosted variable font, latin subset, weights 400–600. */
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 400 600;
+  font-display: swap;
+  src: url('/fonts/jetbrains-mono-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* Tiny (1 KB) subset with the arrows used in the UI: ← → ↗ */
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 400 600;
+  font-display: swap;
+  src: url('/fonts/jetbrains-mono-arrows.woff2') format('woff2');
+  unicode-range: U+2190, U+2192, U+2197;
+}
+
+/*
+ * ── Theme tokens ───────────────────────────────────────────────
+ * Every color on the site comes from these variables.
+ * To change the accent, edit --accent / --accent-soft in BOTH blocks.
+ * Contrast (WCAG): text ≥ 15:1, muted ≥ 6:1, accent ≥ 5:1 in both themes.
+ */
+:root {
+  color-scheme: light;
+  --bg: #fafaf7;
+  --surface: #f2f2ec;
+  --fg: #16181d;
+  --muted: #565c66;
+  --border: #dcdcd3;
+  --accent: #086d60; /* teal, 5.9:1 on --bg */
+  --accent-soft: #086d601a;
+}
+
+/* Dark values: applied when the user picks dark, or when there is no choice and the OS prefers dark
+   (the CSS fallback also covers visitors with JavaScript disabled). */
+@media (prefers-color-scheme: dark) {
+  :root:not(.light) {
+    color-scheme: dark;
+    --bg: #0f1113;
+    --surface: #171a1d;
+    --fg: #e8e9e6;
+    --muted: #9aa0a8;
+    --border: #2a2e33;
+    --accent: #3fd9bf; /* 11:1 on --bg */
+    --accent-soft: #3fd9bf1f;
+  }
+}
+:root.dark {
+  color-scheme: dark;
+  --bg: #0f1113;
+  --surface: #171a1d;
+  --fg: #e8e9e6;
+  --muted: #9aa0a8;
+  --border: #2a2e33;
+  --accent: #3fd9bf;
+  --accent-soft: #3fd9bf1f;
+}
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-fg: var(--fg);
+  --color-muted: var(--muted);
+  --color-line: var(--border);
+  --color-accent: var(--accent);
+  --color-accent-soft: var(--accent-soft);
+
+  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --font-sans: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+@layer base {
+  html {
+    @apply bg-bg text-fg font-sans antialiased;
+    -webkit-text-size-adjust: 100%;
+    text-rendering: optimizeLegibility;
+  }
+  body {
+    @apply min-h-dvh bg-bg leading-relaxed;
+  }
+  ::selection {
+    background: var(--accent);
+    color: var(--bg);
+  }
+  a {
+    @apply text-fg underline decoration-line decoration-1 underline-offset-4 transition-colors;
+  }
+  a:hover {
+    @apply decoration-accent text-accent;
+  }
+  :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+}
+
+@layer components {
+  /* Rendered Markdown (project detail pages) */
+  .prose-body {
+    @apply space-y-5 text-[1.0625rem];
+  }
+  .prose-body h2 {
+    @apply font-mono text-lg font-semibold pt-6;
+  }
+  .prose-body h3 {
+    @apply font-mono text-base font-semibold pt-4;
+  }
+  .prose-body ul {
+    @apply list-none space-y-2 pl-0;
+  }
+  .prose-body ul > li {
+    @apply relative pl-5;
+  }
+  .prose-body ul > li::before {
+    content: '–';
+    @apply absolute left-0 text-accent;
+  }
+  .prose-body ol {
+    @apply list-decimal space-y-2 pl-5 marker:text-muted;
+  }
+  .prose-body code {
+    @apply font-mono text-[0.875em] bg-surface border border-line rounded px-1 py-0.5;
+  }
+  .prose-body pre {
+    @apply overflow-x-auto rounded border border-line bg-surface p-4 text-sm;
+  }
+  .prose-body pre code {
+    @apply border-0 bg-transparent p-0;
+  }
+  .prose-body blockquote {
+    @apply border-l-2 border-accent pl-4 text-muted;
+  }
+  .prose-body img {
+    @apply rounded border border-line;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

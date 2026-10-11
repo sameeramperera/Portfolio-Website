@@ -1,0 +1,33 @@
+---
+import Base from '@/layouts/Base.astro';
+import PageHeader from '@/components/PageHeader.astro';
+import { links } from '@/config';
+
+const items = [
+  { label: 'email', value: links.email, href: links.email && `mailto:${links.email}`, external: false },
+  { label: 'github', value: links.github, href: links.github, external: true },
+  { label: 'linkedin', value: links.linkedin, href: links.linkedin, external: true },
+  { label: 'medium', value: links.medium, href: links.medium, external: true },
+].filter((i) => i.value);
+
+const pretty = (url: string) => url.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '');
+---
+
+<Base title="Contact" description="How to get in touch.">
+  <PageHeader title="contact" lead="The best way to reach me is email. I'm also around on these sites." />
+  <dl class="space-y-4">
+    {
+      items.map(({ label, value, href, external }) => (
+        <div class="grid gap-0.5 sm:grid-cols-[6.5rem_1fr] sm:gap-6">
+          <dt class="font-mono text-xs text-muted sm:leading-7">{label}</dt>
+          <dd class="break-all sm:leading-7">
+            <a href={href} rel={external ? 'me noopener noreferrer' : undefined} target={external ? '_blank' : undefined}>
+              {external ? pretty(value) : value}
+              {external && <span class="sr-only"> (new tab)</span>}
+            </a>
+          </dd>
+        </div>
+      ))
+    }
+  </dl>
+</Base>

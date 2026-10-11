@@ -1,0 +1,31 @@
+---
+/** Small eyebrow line: "personal project" or "associated with <company>". */
+interface Props {
+  company?: string | null;
+  companyUrl?: string;
+  class?: string;
+}
+const { company, companyUrl, class: className } = Astro.props;
+---
+
+<p class:list={['font-mono text-xs text-muted', className]}>
+  {
+    company ? (
+      <>
+        associated with{' '}
+        {companyUrl ? (
+          <a href={companyUrl} target="_blank" rel="noopener noreferrer" class="relative z-10 text-muted hover:text-accent">
+            {company}
+            <span class="sr-only"> (new tab)</span>
+          </a>
+        ) : (
+          <span class="text-fg">{company}</span>
+        )}
+      </>
+    ) : (
+      <>
+        personal project
+      </>
+    )
+  }
+</p>

@@ -1,0 +1,13 @@
+---
+import { profile, links } from '@/config';
+const year = new Date().getFullYear();
+---
+
+<footer class="flex flex-wrap items-center justify-between gap-3 border-t border-line py-6 font-mono text-xs text-muted">
+  <p>© {year} {profile.name}</p>
+  <ul class="flex gap-4">
+    {links.github && <li><a class="text-muted no-underline hover:text-accent" href={links.github} rel="me">github</a></li>}
+    {links.linkedin && <li><a class="text-muted no-underline hover:text-accent" href={links.linkedin} rel="me">linkedin</a></li>}
+    {links.medium && <li><a class="text-muted no-underline hover:text-accent" href={links.medium} rel="me">medium</a></li>}
+  </ul>
+</footer>

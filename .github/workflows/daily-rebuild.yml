@@ -1,0 +1,51 @@
+name: Daily Medium refresh
+
+on:
+  schedule:
+    - cron: '17 5 * * *'
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+concurrency:
+  group: daily-refresh
+  cancel-in-progress: true
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Refresh Medium cache
+        id: refresh
+        continue-on-error: true
+        run: node scripts/refresh-medium-cache.ts
+
+      - name: Commit cache if it changed
+        id: commit
+        run: |
+          # Ignore changes that are only the "updated" timestamp.
+          if git diff --unified=0 src/data/medium-cache.json | grep '^[+-] ' | grep -qv '"updated"'; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add src/data/medium-cache.json
+            git commit -m "chore: refresh Medium posts cache"
+            git push
+            echo "pushed=true" >> "$GITHUB_OUTPUT"
+          else
+            git checkout -- src/data/medium-cache.json
+          fi
+
+      - name: Trigger Vercel Deploy Hook
+        if: steps.commit.outputs.pushed != 'true' && steps.refresh.outcome == 'failure'
+        env:
+          HOOK: ${{ secrets.VERCEL_DEPLOY_HOOK_URL }}
+        run: |
+          if [ -z "$HOOK" ]; then echo "VERCEL_DEPLOY_HOOK_URL not set, skipping."; exit 0; fi
+          curl -fsS -X POST "$HOOK"

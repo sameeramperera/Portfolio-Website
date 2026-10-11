@@ -1,0 +1,49 @@
+---
+import Base from '@/layouts/Base.astro';
+import PageHeader from '@/components/PageHeader.astro';
+import TagList from '@/components/TagList.astro';
+import { getExperience } from '@/lib/content';
+import { formatPeriod } from '@/lib/format';
+
+const roles = await getExperience();
+
+const dot = (current: boolean) => [
+  'absolute -left-[5px] top-[0.45rem] size-[9px] rounded-full border',
+  current ? 'border-accent bg-accent' : 'border-line bg-bg',
+];
+---
+
+<Base title="Experience" description="Roles, companies and the work I did there.">
+  <PageHeader title="experience" lead="Where I've worked and what I did there." />
+
+  <ol class="relative ml-1 border-l border-line">
+    {
+      roles.map(({ data }) => (
+        <li class="relative pb-12 pl-7 last:pb-0">
+          <span class:list={dot(!data.end)} aria-hidden="true" />
+          <p class="font-mono text-xs text-muted tabular-nums">
+            <time datetime={data.start}>{formatPeriod(data.start)}</time> –{' '}
+            {data.end ? <time datetime={data.end}>{formatPeriod(data.end)}</time> : <span class="text-accent">present</span>}
+          </p>
+          <h2 class="mt-1.5 text-lg font-semibold leading-snug">
+            {data.role}
+            <span class="font-normal text-muted"> · </span>
+            {data.companyUrl ? <a href={data.companyUrl} target="_blank" rel="noopener noreferrer">{data.company}</a> : data.company}
+          </h2>
+          <p class="text-sm text-muted">{data.location}</p>
+          {data.highlights.length > 0 && (
+            <ul class="mt-4 space-y-2 text-[0.9375rem]">
+              {data.highlights.map((h) => (
+                <li class="relative pl-5">
+                  <span class="absolute left-0 text-accent" aria-hidden="true">–</span>
+                  {h}
+                </li>
+              ))}
+            </ul>
+          )}
+          <TagList tags={data.tags} class="mt-4" />
+        </li>
+      ))
+    }
+  </ol>
+</Base>

@@ -1,0 +1,14 @@
+---
+import Base from '@/layouts/Base.astro';
+import { nav } from '@/config';
+---
+
+<Base title="Not found" description="This page doesn't exist." noindex>
+  <p class="font-mono text-sm text-accent">error 404</p>
+  <h1 class="mt-2 font-mono text-2xl font-semibold tracking-tight">Nothing lives at this path.</h1>
+  <p class="mt-4 text-muted">The page may have moved, or the link might have a typo.</p>
+  <ul class="mt-10 space-y-2 font-mono text-sm">
+    <li><a href="/"><span class="text-accent" aria-hidden="true">→ </span>home</a></li>
+    {nav.map(({ href, label }) => <li><a href={href}><span class="text-accent" aria-hidden="true">→ </span>{label}</a></li>)}
+  </ul>
+</Base>

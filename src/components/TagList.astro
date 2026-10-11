@@ -1,0 +1,17 @@
+---
+import Tag from './Tag.astro';
+interface Props {
+  tags: string[];
+  label?: string;
+  class?: string;
+}
+const { tags, label = 'Technologies', class: className } = Astro.props;
+---
+
+{
+  tags.length > 0 && (
+    <ul class:list={['flex flex-wrap gap-1.5', className]} aria-label={label}>
+      {tags.map((t) => <Tag>{t}</Tag>)}
+    </ul>
+  )
+}
