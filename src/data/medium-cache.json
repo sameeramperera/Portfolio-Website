@@ -1,5 +1,17 @@
 {
   "_comment": "Fallback used when the Medium feed can't be fetched at build time. Refresh with `npm run medium:refresh`.",
-  "updated": "2026-10-11T00:00:00.000Z",
-  "posts": []
+  "updated": "2026-10-11T17:46:47.271Z",
+  "posts": [
+    {
+      "title": "How Have I Been Pwned API Uses k-Anonymity to Check Passwords Privately",
+      "url": "https://sameeramperera.medium.com/how-have-i-been-pwned-api-uses-k-anonymity-to-check-passwords-privately-5c0e2c64990b",
+      "date": "2026-10-11T13:26:26.000Z",
+      "excerpt": "In today’s digital world, passwords are constantly at risk. With millions of credentials exposed in data breaches every year, knowing whether your password has been compromised is…",
+      "tags": [
+        "cybersecurity",
+        "hacking",
+        "password-security"
+      ]
+    }
+  ]
 }
